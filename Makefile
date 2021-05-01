@@ -1,8 +1,5 @@
-.PHONY: show clean
+.PHONY: clean
 BASENAME=master_thesis
-
-show: $(BASENAME).pdf 
-	evince $< &
 
 $(BASENAME).pdf: $(BASENAME).tex bibliography.bib
 	latex $<
