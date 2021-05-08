@@ -23,6 +23,9 @@ In conclusion, we showed that BLAST-Blast2Bam may be useful in some NGS applicat
 
 **Keywords**: BLAST, BWA, NGS, SAM.
 
+# PDF version
+
+https://github.com/guyduche/master_thesis/blob/master/GUY-DUCHE_master_thesis.pdf
 
 # Requirements
 

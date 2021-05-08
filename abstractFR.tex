@@ -1,8 +1,9 @@
 \begin{otherlanguage}{french}
 \chapter*{Résumé}
 \addcontentsline{toc}{chapter}{Résumé}
+\frenchspacing
 
-Basic Local Alignment Search Tool (BLAST) est couramment utilisé depuis 1990 pour aligner des séquences d'ADN.
+Basic Local Alignment Search Tool (BLAST) est couramment utilisé depuis 1990 pour aligner des séquences d'ADN\@.
 Depuis la révolution provoquée par l'arrivée du séquençage haut débit (NGS), les alignements de séquences sont faits par des logiciels plus rapides tels que Burrows-Wheeler Aligner (BWA).
 Dans ce projet, nous nous proposons de déterminer si BLAST peut être plus précis et donc s'il pourrait être utile dans certaines applications pour améliorer les résultats obtenus avec d'autres logiciels d'alignement.
 
@@ -12,12 +13,13 @@ Pour permettre l'utilisation de données NGS par BLAST, nous avons créé deux p
 Dans le cas où le séquençage aurait été réalisé de façon \emph{paired-end}, \blastobam{} conserve l'appariement des séquences afin d'améliorer l'alignement.
 Les logiciels ont passé les étapes de validation.
 
-Nous avons ensuite évalué les différences d'exécution qui existent entre BLAST--\blastobam{} et BWA.
+Nous avons ensuite évalué les différences d'exécution qui existent entre BLAST--\blastobam{} et BWA\@.
 Comme prévu, BWA s'est révélé beaucoup plus rapide que BLAST--\blastobam{}.
 Néanmoins, ce dernier a montré qu'il pouvait être plus précis en permettant l'obtention d'une couverture de séquençage plus importante.
 
 En conclusion, nous avons montré que BLAST--\blastobam{} peut être utile pour confirmer et\slash\hspace{0pt}ou améliorer les résultats d'autres logiciels d'alignement de séquences.
 \bigskip
 
-\textbf{Mots-clés :} BLAST, BWA, NGS, SAM.
+\textbf{Mots-clés :} BLAST, BWA, NGS, SAM\@.
+\nonfrenchspacing
 \end{otherlanguage}

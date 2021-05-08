@@ -2,8 +2,7 @@
 \pagenumbering{arabic}
 
 
-\section{Sequencing}
-\label{sec:sequencing}
+\section{Sequencing}\label{sec:sequencing}
 Since 1869 and the discovery of ``nuclein'' by \href{https://books.google.fr/books?id=YJRTAAAAcAAJ&pg=PA456&redir_esc=y#v=onepage&q&f=false}{F.~\textsc{Miescher}}, we have come to understand that \gls{dna} is the basis of every living organism on Earth.
 It is a code composed of four letters (nucleotides).
 In order to read this code and maybe be able to decipher it, new technologies had to be invented.
@@ -13,7 +12,7 @@ In 1977, F.~\textsc{Sanger} and his team performed the first complete genome seq
 In 2003, the International Human Genome Sequencing Consortium announced that the Human genome had been essentially sequenced.
 
 In the next years appeared new technologies called \gls{ngs} that revolutionized genome research.
-These technologies, especially \href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise 2ex\hbox{\textregistered}}, will be discussed in more detail in section~\ref{sec:ngs}.
+These technologies, especially \href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise2ex\hbox{\textregistered}}, will be discussed in more detail in Section~\ref{sec:ngs}.
 They have allowed the researchers to obtain sequences much faster than what was possible before and at a fraction of the price.
 This has contributed to the more widespread use of \gls{dna} sequencing.
 Nowadays, medical practionners use it more and more commonly to clarify the diagnostic of genetic pathologies and\slash\hspace{0pt}or to predict the risks of developing one.
@@ -25,8 +24,7 @@ The alignment could theoretically be done by hand but as the Human genome is com
 And so, programs have been developed to perform this task.
 
 
-\section{Basic Local Alignment Search Tool (BLAST)}
-\label{sec:blast}
+\section{Basic Local Alignment Search Tool (BLAST)}\label{sec:blast}
 \begin{wrapfigure}[3]{l}{0.09\textwidth}
     \vspace{-1.2em}
     \includegraphics[width=0.1\textwidth]{img/blast}
@@ -68,23 +66,22 @@ Its process can be decomposed into six main steps:
 \end{enumerate}
 
 
-\section{Next Generation Sequencing (NGS)}
-\label{sec:ngs}
-As we have seen in section~\ref{sec:sequencing}, around the mid-2000s, the second generation sequencers, commonly called \gls{ngs}, have considerably increased the throughput compared with the first generation ones (\textsc{Sanger} sequencers). They allow the researchers to conceive large-scale projects and consider new applications.
+\section{Next Generation Sequencing (NGS)}\label{sec:ngs}
+As we have seen in Section~\ref{sec:sequencing}, around the mid-2000s, the second generation sequencers, commonly called \gls{ngs}, have considerably increased the throughput compared with the first generation ones (\textsc{Sanger} sequencers). They allow the researchers to conceive large-scale projects and consider new applications.
 \gls{ngs} comprises different technologies that share the same goal: to obtain a genome sequence fast, with as few errors as possible and for a low cost.
 These technologies are:
 
 \begin{itemize}
     \item Pyrosequencing (\href{http://www.454.com/}{454 Life Sciences, Roche}),
-    \item Polymerase based sequence by synthesis (\href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise 2ex\hbox{\textregistered}}),
-    \item Ligation based sequencing (SOLiD\texttt{\tiny\raise 2ex\hbox{\texttrademark}}) (\href{http://www.appliedbiosystems.com/absite/us/en/home.html}{Applied Biosystems\texttt{\tiny\raise 2ex\hbox{\texttrademark}}, Thermo Fisher}).
+    \item Polymerase based sequence by synthesis (\href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise2ex\hbox{\textregistered}}),
+    \item Ligation based sequencing (SOLiD\texttt{\tiny\raise2ex\hbox{\texttrademark}}) (\href{http://www.appliedbiosystems.com/absite/us/en/home.html}{Applied Biosystems\texttt{\tiny\raise2ex\hbox{\texttrademark}}, Thermo Fisher}).
 \end{itemize}
 
 They all have their advantages and disadvantages in term of speed, accuracy and cost.
 Recently, new sequencers coined as ``third generation sequencers'' have appeared:
-\href{http://www.pacificbiosciences.com/}{PacBio\ttfamily\tiny\raise 2ex\hbox{\textregistered}} from Pacific Bioscience and \href{https://nanoporetech.com/products-services/minion-mki}{MinION\ttfamily\tiny\raise 2ex\hbox{\texttrademark}} from Oxford Nanopore Technologies.
+\href{http://www.pacificbiosciences.com/}{PacBio\ttfamily\tiny\raise2ex\hbox{\textregistered}} from Pacific Bioscience and \href{https://nanoporetech.com/products-services/minion-mki}{MinION\ttfamily\tiny\raise2ex\hbox{\texttrademark}} from Oxford Nanopore Technologies.
 
-As the experiments proposed in this report are based on data acquired with \href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise 2ex\hbox{\textregistered}} technology, we will now explain its basics.
+As the experiments proposed in this report are based on data acquired with \href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise2ex\hbox{\textregistered}} technology, we will now explain its basics.
 \pagebreak
 
 \begin{wrapfigure}[3]{l}{0.13\textwidth}
@@ -92,7 +89,7 @@ As the experiments proposed in this report are based on data acquired with \href
     \includegraphics[width=0.15\textwidth]{img/illumina}
 \end{wrapfigure}
 
-Illumina\texttt{\tiny\raise 2ex\hbox{\textregistered}}'s sequence by synthesis is currently the most used \gls{ngs} technology worldwide. It is based upon the reading of fluorescent markers as the nucleotides on which they are fixed are used by the polymerase to synthesize a copy of the template. The first sequencer to use this technology was the Genome Analyzer produced by Solexa in 2006. \href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise 2ex\hbox{\textregistered}}, now owner of the technology, commercializes it into four series of sequencers: MiSeq, NextSeq, HiSeq and HiSeq X.
+Illumina\texttt{\tiny\raise2ex\hbox{\textregistered}}'s sequence by synthesis is currently the most used \gls{ngs} technology worldwide. It is based upon the reading of fluorescent markers as the nucleotides on which they are fixed are used by the polymerase to synthesize a copy of the template. The first sequencer to use this technology was the Genome Analyzer produced by Solexa in 2006. \href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise2ex\hbox{\textregistered}}, now owner of the technology, commercializes it into four series of sequencers: MiSeq, NextSeq, HiSeq and HiSeq X.
 
 The sequencing is composed of four main steps~\cite{Illumina2008}:
 \begin{itemize}
@@ -112,7 +109,7 @@ The sequencing is composed of four main steps~\cite{Illumina2008}:
         \item The label is cut. A new cycle can begin.
     \end{itemize}
     Depending on the sequencer, there can be a maximum of 150 to 300 cycles, thus producing reads with a maximum length of 150 to 300 bases.
-    The reads are then written into a fastQ file. We will talk more about this file format in section~\ref{sec:shortReads}.
+    The reads are then written into a fastQ file. We will talk more about this file format in Section~\ref{sec:shortReads}.
 
     \item Data analysis:
     It consists in, firstly, the alignment of the reads to a reference and then the identification of the differences and their biological meaning.
@@ -127,11 +124,10 @@ In common usage, the read associated with the current read is called its ``mate'
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{img/pairedEnd}
-    \caption{Representation of paired-end sequencing.}
-    \label{fig:pairedEndSeq}
+    \caption{Representation of paired-end sequencing.}\label{fig:pairedEndSeq}
 \end{figure}
 
-\href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise 2ex\hbox{\textregistered}} issued a video explaining more precisely how the technology works:\\
+\href{http://www.illumina.com/}{Illumina\ttfamily\tiny\raise2ex\hbox{\textregistered}} issued a video explaining more precisely how the technology works:\\
 \url{https://www.youtube.com/watch?v=womKfikWlxM}.
 
 Concerning the reads alignments, there are two possibilities depending on whether there is a reference sequence or not.

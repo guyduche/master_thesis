@@ -1,5 +1,4 @@
-\chapter{Conclusion}
-\label{ch:conclusion}
+\chapter{Conclusion}\label{ch:conclusion}
 The aim of this project was to develop a software able to align short-reads using \gls{ncbi}\slash\gls{blast}.
 Following these objectives, we created two programs:
 \begin{itemize}
@@ -19,7 +18,7 @@ More tests would be necessary to confirm it.
 Although \fastqtofasta{} and \blastobam{} are working properly, there is still room for improvement.
 For example, nothing was done, yet, concerning chimeric alignments, i.e.~a read of which two different parts have been found to be matched at different positions on the reference.
 Example: the first half of the read is mapped at a position on the reference and the second half is mapped at another place on the reference.
-Currently, \blastobam{} considers both but will output the one with the lowest score as the best (see subsection~\ref{subsec:thereCanBeOnlyOne}) and the other one as secondary.
+Currently, \blastobam{} considers both but will output the one with the lowest score as the best (see Subsection~\ref{subsec:thereCanBeOnlyOne}) and the other one as secondary.
 
 As reported by Peter \textsc{Cock} on \href{http://blastedbio.blogspot.fr/2015/07/ncbi-working-on-sam-output-from-blast.html}{http://blastedbio.blogspot.fr}, the \gls{ncbi} is working on a \gls{sam} output for \gls{blast}. It is present in the current version of \gls{blast}\texttt{+} (2.2.31) as an undocumented option (\texttt{-outfmt 15}).
 Like blast2sam.pl, it seems to be a converter. As of now, it does not produce a proper header, the read names are changed, there is no pairing and the sequence quality is lost.

@@ -1,5 +1,4 @@
-\chapter{Results}
-\label{ch:results}
+\chapter{Results}\label{ch:results}
 The goal of this project was to make a short-read alignment program using \gls{ncbi}\slash\gls{blast}.
 To determine whether the results matched our expectations or not, we tested the program on different sets of data and compared the results with \gls{bwa}.
 We have chosen \gls{bwa} as a gold standard because it is the most commonly used software to align \gls{ngs} \gls{dna} data.
@@ -19,13 +18,13 @@ The results obtained with the other sets are available on GitHub: \url{https://g
 
 \section{Proof of concept}
 First, we wanted to know if the software worked and if it produced a proper \gls{sam} file.
-To obtain the results, we created a Makefile (figure~\ref{fig:hivMake}).
+To obtain the results, we created a Makefile (Figure~\ref{fig:hivMake}).
 The program ``\texttt{makeblastdb}'' makes an index of the reference. \gls{blast} needs it to map the sequences.
 The command ``\texttt{samtools view -Sb -}'' creates a BAM file from a \gls{sam} input.
-The option ``\texttt{-F 0xF00}'' is used to remove the secondary and supplementary alignments (see FLAG in subsection~\ref{subsec:samCreation}).
+The option ``\texttt{-F 0xF00}'' is used to remove the secondary and supplementary alignments (see FLAG in Subsection~\ref{subsec:samCreation}).
 We added the \href{http://www.htslib.org/}{SAMtools} part to see if the \gls{sam} file produced was proper, i.e.~compatible with downstream softwares.
 
-Figures~\ref{fig:samBLAST} and \ref{fig:samBWA} show a partial representation of the results obtained.
+Figures~\ref{fig:samBLAST} and~\ref{fig:samBWA} show a partial representation of the results obtained.
 These figures were obtained by using \texttt{samtools view -h} to make the BAM files readable.
 
 \begin{figure}
@@ -59,12 +58,11 @@ resultsBWA.bam: ${FASTQ} $(addsuffix .bwt, ${DB})
 $(addsuffix .bwt, ${DB}): ${DB}
 	bwa index ${DB}
 \end{lstlisting}
-\caption{Makefile used for the \acrshort{hiv} dataset.}
-\label{fig:hivMake}
+\caption{Makefile used for the \acrshort{hiv} dataset.}\label{fig:hivMake}
 \end{figure}
 
 Figure~\ref{fig:samBLAST} first tells us that \blastobam{} is working: there is an output, and this output is accepted by \href{http://www.htslib.org/}{SAMtools}.
-If we compare figures~\ref{fig:samBLAST} and \ref{fig:samBWA}, we can see that both outputs seems to be similar:
+If we compare figures~\ref{fig:samBLAST} and~\ref{fig:samBWA}, we can see that both outputs seems to be similar:
 
 \begin{itemize}
     \item The flags are correctly formed and are the same as \gls{bwa}'s.
@@ -76,8 +74,8 @@ There are however some differences:
 
 \begin{itemize}
     \item The \gls{cigar} strings are dissimilar.
-    This can be explained by the fact that, as we have seen in subsection~\ref{subsec:samCreation}, \gls{bwa} does not display differently matches and mismatches (\texttt{M}).
-    \item TLEN: 120 for \gls{bwa} and 119 for \blastobam{}. As, in this case, \gls{blast} and \gls{bwa} have created the same alignment, the two TLEN should be the same.
+    This can be explained by the fact that, as we have seen in Subsection~\ref{subsec:samCreation}, \gls{bwa} does not display differently matches and mismatches (\texttt{M}).
+    \item TLEN\@: 120 for \gls{bwa} and 119 for \blastobam{}. As, in this case, \gls{blast} and \gls{bwa} have created the same alignment, the two TLEN should be the same.
     However, if we look at the sequences, we can see that they begin with an `N'. \gls{blast} does not consider it as a nucleotide and so does not consider it for alignment.
     This can be seen in the \gls{cigar} string of the first read: it ends with `1S'. When faced with an `N', \gls{bwa} replaces it with one of the four nucleotides chosen randomly.
     This explains that \gls{bwa}'s \gls{cigar} string does not end with `1S' and that its TLEN and NM tag are one base longer.
@@ -116,8 +114,7 @@ ERR656485.2    163    gi|9629357|ref|NC_001802.1|    715    60
     NM:i:13    AS:i:82    XB:f:152.546    XE:Z:3.15e-40
 (...)
 \end{lstlisting}
-\caption{Excerpt from the \acrshort{sam} file produced by \acrshort{blast}--\blastobam{}.}
-\label{fig:samBLAST}
+\caption{Excerpt from the \acrshort{sam} file produced by \acrshort{blast}--\blastobam{}.}\label{fig:samBLAST}
 \end{figure}
 
 \begin{figure}[H]
@@ -146,13 +143,12 @@ ERR656485.2    163    gi|9629357|ref|NC_001802.1|    715    60
     ))))))((,(-)))()((()))    NM:i:13    AS:i:56    XS:i:0
 (...)
 \end{lstlisting}
-\caption{Excerpt from the \acrshort{sam} file produced by \acrshort{bwa}.}
-\label{fig:samBWA}
+\caption{Excerpt from the \acrshort{sam} file produced by \acrshort{bwa}.}\label{fig:samBWA}
 \end{figure}
 
 
-\section{BLAST--Blast2Bam vs.~BWA}
-As we have seen in section~\ref{sec:blast}, \gls{blast} has not been developed to map \gls{ngs} reads.
+\section{BLAST\textendash{}Blast2Bam vs.~BWA}
+As we have seen in Section~\ref{sec:blast}, \gls{blast} has not been developed to map \gls{ngs} reads.
 Therefore, its parameters may need to be optimized.
 The efficiency of \gls{blast} is largely dependent upon its seed length (option \texttt{-word\_size}).
 The default \texttt{word\_size} of \gls{blast} is 28, which means that in order to align a read, \gls{blast} needs to find at least a 28 bases long match.
@@ -176,7 +172,7 @@ With a \texttt{word\_size} of 8 (minimum), 1182 seconds (19~min 42~s) are needed
 With a \texttt{word\_size} of 28 (maximum), 910 seconds (15~min 10~s) are needed to output the results.
 
 If we compare the results from both softwares, \gls{bwa} is unquestionably much faster than \gls{blast}--\blastobam{}.
-As we have seen in section~\ref{sec:ngs}, part of why \gls{bwa} was created was to make up for the lack of speed of the previous generation aligners in order to be able to work with whole genome data.
+As we have seen in Section~\ref{sec:ngs}, part of why \gls{bwa} was created was to make up for the lack of speed of the previous generation aligners in order to be able to work with whole genome data.
 Knowing this, it seems coherent that, in our tests, \gls{bwa} has been found to be faster than \gls{blast}.
 
 
@@ -191,7 +187,7 @@ With a \texttt{word\_size} of 8 (minimum), 547233 reads are mapped (66.53\%).\\
 With a \texttt{word\_size} of 28 (maximum), 369912 reads are mapped (44.98\%).
 
 If we compare the results obtained with \gls{blast}--\blastobam{} and \gls{bwa}, we can see that even at its best, \gls{blast} does not map as much reads as \gls{bwa}.
-However, this may be due to \blastobam{} record filtering. As we have seen in subsection~\ref{subsec:autofilter}, \blastobam{} filters its results based on their alignment length.
+However, this may be due to \blastobam{} record filtering. As we have seen in Subsection~\ref{subsec:autofilter}, \blastobam{} filters its results based on their alignment length.
 If we deactivate the filtering (\texttt{-W 0}), the results are completely different: 788364 mapped (95.85\%) with \texttt{word\_size~8}.
 
 With the filtering, the aim of \gls{blast}--\blastobam{} is not to have the most reads mapped but to output alignments with a better quality.
@@ -219,21 +215,18 @@ We can see that, in that case, \gls{blast}--\blastobam{} seems to be able to ali
 \begin{figure}
     \begin{subfigure}[b]{0.5\textwidth}
         \includegraphics{img/time}
-        \caption{Time needed by \acrshort{blast}--\blastobam{}.}
-        \label{fig:time}
+        \caption{Time needed by \acrshort{blast}--\blastobam{}.}\label{fig:time}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.5\textwidth}
         \includegraphics{img/nbReads}
-        \caption{Percentage of reads mapped.}
-        \label{fig:nbReads}
+        \caption{Percentage of reads mapped.}\label{fig:nbReads}
     \end{subfigure}
     \smallskip
     
     \begin{subfigure}[b]{0.5\textwidth}
         \includegraphics{img/coverage}
-        \caption{Coverage.}
-        \label{fig:coverage}
+        \caption{Coverage.}\label{fig:coverage}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.5\textwidth}
@@ -252,18 +245,15 @@ We can see that, in that case, \gls{blast}--\blastobam{} seems to be able to ali
         \end{minipage}
         \end{flushright}
         \vspace{1.5cm}
-        \caption{\acrshort{bwa} results}
-        \label{fig:bwaResults}
+        \caption{\acrshort{bwa} results}\label{fig:bwaResults}
     \end{subfigure}
     \caption[Results obtained with \acrshort{blast}--\blastobam{} and \acrshort{bwa}]{Results obtained with \acrshort{blast}--\blastobam{} (a,b,c) and \acrshort{bwa} (d).
     (a) Time needed by \acrshort{blast}--\blastobam{} to output the results. (b) Percentage of reads mapped. (c) Coverage. (a,b,c) are expressed as functions of \acrshort{blast} seed length.
-    (d) \acrshort{bwa} results.}
-    \label{fig:results}
+    (d) \acrshort{bwa} results.}\label{fig:results}
 \end{figure}
 
 \begin{sidewaysfigure}
 \includegraphics[scale=0.45]{img/igv01}
 \caption[IGV representation of the alignments obtained with \acrshort{blast}--\blastobam{} and with \acrshort{bwa}.]
-{IGV representation of the alignments obtained with \acrshort{blast}--\blastobam{} (\texttt{-word\_size~8}) and with \acrshort{bwa}. Upper part: \gls{blast}--\blastobam{}. Lower part: \gls{bwa}.}
-\label{fig:igv}
+{IGV representation of the alignments obtained with \acrshort{blast}--\blastobam{} (\texttt{-word\_size~8}) and with \acrshort{bwa}. Upper part: \gls{blast}--\blastobam{}. Lower part: \gls{bwa}.}\label{fig:igv}
 \end{sidewaysfigure}

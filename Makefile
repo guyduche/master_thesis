@@ -1,7 +1,7 @@
 .PHONY: clean
 BASENAME=master_thesis
 
-$(BASENAME).pdf: $(BASENAME).tex bibliography.bib
+GUY-DUCHE_$(BASENAME).pdf: $(BASENAME).tex bibliography.bib
 	latex $<
 	makeglossaries $(BASENAME)
 	makeglossaries $(BASENAME)
@@ -9,8 +9,8 @@ $(BASENAME).pdf: $(BASENAME).tex bibliography.bib
 	latex $<
 	latex $<
 	latex $<
-	dvips $(basename $<).dvi
-	ps2pdf $(basename $<).ps
+	dvips $(BASENAME).dvi
+	ps2pdf $(BASENAME).ps $@
 
 clean:
-	rm -f $(addprefix $(BASENAME), .pdf .ps .dvi .toc .ist .glo .acn .acr .alg .lof .bbl .blg .glg .gls .out .log) *.aux
+	rm -f $(addprefix $(BASENAME), .ps .dvi .toc .ist .glo .acn .acr .alg .lof .bbl .blg .glg .gls .out .log) *.aux GUY-DUCHE_$(BASENAME).pdf

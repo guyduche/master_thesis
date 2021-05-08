@@ -5,9 +5,8 @@ We will now see how it was done.
 All the sources, tests and manual can be found on GitHub: \url{https://github.com/guyduche/Blast2Bam}.
 
 
-\section{\fastqtofasta{}}
-\label{sec:fastq2fasta}
-As we have seen in subsection~\ref{subsec:blastinput}, \gls{blast} cannot process fastQ files.
+\section{\fastqtofasta{}}\label{sec:fastq2fasta}
+As we have seen in Subsection~\ref{subsec:blastinput}, \gls{blast} cannot process fastQ files.
 FastQs must be transformed into fasta files.
 
 This can be done with bash commands but we thought it would be more user-friendly to integrate it in a simple tool.
@@ -19,13 +18,12 @@ In the process, the `@' at the beginning of the first line is replaced with a `\
 
 \section{\blastobam{}}
 \blastobam{} is the name we gave to the program we created to go from a \gls{blast} \gls{xml} output to a fully compatible \gls{sam} file.
-As we have seen in section~\ref{sec:samoutput}, a \gls{sam} file is composed of two parts: the header section and the alignment section.
+As we have seen in Section~\ref{sec:samoutput}, a \gls{sam} file is composed of two parts: the header section and the alignment section.
 We will now see how \blastobam{} is able to create them.
 
 
-\subsection{Header section}
-\label{subsec:header}
-As we have seen previously (section~\ref{sec:samoutput}), a \gls{sam} header is composed of mainly four types of line: \emph{@HD, @SQ, @RG and @PG}.
+\subsection{Header section}\label{subsec:header}
+As we have seen previously (Section~\ref{sec:samoutput}), a \gls{sam} header is composed of mainly four types of line: \emph{@HD, @SQ, @RG and @PG}.
 \begin{itemize}
     \item \emph{@HD} is created automatically by \href{http://www.htslib.org/}{SAMtools} when the \gls{sam} file is transformed into BAM (binary version of \gls{sam}).
     Thus, there is no need for \blastobam{} to create this line.
@@ -84,14 +82,14 @@ If we compare figure~\ref{fig:xmlExample} and figure~\ref{fig:samBWA}, we can se
 \end{itemize}
 
 This information can be extracted from the original fastQ(s). Consequently, \blastobam{} parses the fastQ and writes its contents into the \gls{sam} file.
-This parsing is done essentially the same way it was done by \fastqtofasta{} (section~\ref{sec:fastq2fasta}), apart from the fact that, in this implementation, the fourth line (sequencing quality) is kept and there is no fasta file writing.
+This parsing is done essentially the same way it was done by \fastqtofasta{} (Section~\ref{sec:fastq2fasta}), apart from the fact that, in this implementation, the fourth line (sequencing quality) is kept and there is no fasta file writing.
 
 
 \subsection{Read pairing}
 % Always two there are, no more, no less, a read and its mate.
 \gls{blast} does not recognize paired-end data.
 It maps a single sequence with the reference and outputs the alignment results.
-As we can see in figure~\ref{fig:samBWA}, the read and its mate should be paired in \gls{sam} output.
+As we can see in Figure~\ref{fig:samBWA}, the read and its mate should be paired in \gls{sam} output.
 It is essential to obtain the FLAG, RNEXT, PNEXT and TLEN columns.
 
 If the sequencing data is single-end, no pairing is possible. In that case, FLAG does not display any pairing component, RNEXT shows the indefinite character `*' and PNEXT and TLEN are nullified.
@@ -99,7 +97,7 @@ If the sequencing data is single-end, no pairing is possible. In that case, FLAG
 The pairing must be done at several levels:
 \begin{itemize}
     \item \gls{blast} should process the sequence of the mate just after its corresponding read.
-    We have seen in section~\ref{sec:shortReads} that paired-end data can come in two flavors: two fastQs or a single interleaved one.
+    We have seen in Section~\ref{sec:shortReads} that paired-end data can come in two flavors: two fastQs or a single interleaved one.
     In case of interleaved data, the read and its mate will already be processed one after the other.
     In case of two fastQs, \fastqtofasta{} is instructed to read alternatively from the first and second file, thus writing an interleaved fasta file.
     \item The \gls{blast} output is parsed two iterations at a time (\gls{blast} does one iteration for each read).
@@ -122,8 +120,7 @@ The pairing must be done at several levels:
 \end{itemize}
 
 
-\subsection{Record filtering}
-\label{subsec:recFilter}
+\subsection{Record filtering}\label{subsec:recFilter}
 As we have seen in the last subsection, a record (\emph{RecordSam}) is created for each possible combination of \glspl{hsp} between the two reads.
 Some of the combinations created may be good pairs but others may not.
 \blastobam{} needs to sort them out and output only the relevant ones in the \gls{sam} file.
@@ -135,7 +132,7 @@ In \gls{sam} format specification~\cite{samspec}, TLEN is partially defined as s
 \end{quote}
 Considering how paired-end sequencing works (see figure~\ref{fig:pairedEndSeq}), in a pair, the reads (segments) should be `facing' each others; the leftmost mapped base should be the 5'~end of one of the read and the rightmost, the 5'~end of its mate.
 In other words, unsigned TLEN should be the distance on the reference between the 5'~ends of the reads.
-In \gls{blast} output, the 5'~end of a read's alignment is available under \texttt{hsp->\allowbreak hsp\_hit\_from} tag.
+In \gls{blast} output, the 5'~end of a read's alignment is available under \texttt{hsp->\allowbreak{}hsp\_hit\_from} tag.
 And so, unsigned TLEN equals to 1 + the absolute value of the difference between the position of the two 5'~ends.
 
 To filter the records, we arbitrarily decided that TLEN should not be greater than three times the size on the reference of the longest alignment between the two reads.
@@ -143,66 +140,64 @@ If a record does not agree with that rule, it will be marked and so will not be 
 If in an \emph{IterationSam}, no record passes that test, the two reads will be considered unmapped.
 
 
-\subsection{Selection of the best record}
-\label{subsec:thereCanBeOnlyOne}
+\subsection{Selection of the best record}\label{subsec:thereCanBeOnlyOne}
 Along with the filtering, the best record must be chosen. This is necessary for the FLAG creation as we will see in the next subsection.
 To determine which paired record is the best, a score must be calculated.
-Each alignment possesses an e-value (\texttt{hsp->\allowbreak hsp\_evalue}); the smaller, the better.
+Each alignment possesses an e-value (\texttt{hsp->\allowbreak{}hsp\_evalue}); the smaller, the better.
 The score of the record is the sum of the e-values of its two alignments.
 If one of the two reads is unmapped, an arbitrary penalty of \texttt{+}0.5 is applied.
 The paired record with the smallest score is considered the best and marked as such.
 
 
-\subsection{Sequence Alignment\slash Map format (SAM) alignment section creation}
-\label{subsec:samCreation}
+\subsection{Sequence Alignment\slash{}Map format (SAM) alignment section creation}\label{subsec:samCreation}
 After input parsing, read pairing, filtering and best record selection, all the necessary elements of the \gls{sam} file are recorded, organised and ready to be printed.
 
-As we have seen in section~\ref{sec:samoutput}, a \gls{sam} record is composed of 11 mandatory columns and an optional one.
+As we have seen in Section~\ref{sec:samoutput}, a \gls{sam} record is composed of 11 mandatory columns and an optional one.
 We will now see how \blastobam{} creates them.
 \begin{enumerate}
-    \item QNAME: The name of the read is taken from the \emph{SamOutput} structure: \texttt{samOutput->\allowbreak query->\allowbreak name}.
-    \item FLAG:
+    \item QNAME\@: The name of the read is taken from the \emph{SamOutput} structure: \texttt{samOutput->\allowbreak{}query->\allowbreak{}name}.
+    \item FLAG\@:
     \begin{itemize}
-        \item 0x1 is set when the sequencing data is paired-end. If it is unset, 0x2, 0x8, 0x20, 0x40 and 0x80 cannot be set.
-        \item 0x2 is set when the pair of reads is considered properly aligned.
-        As the paired records have already been filtered (see subsection~\ref{subsec:recFilter}), every mapped reads coming from paired-end data is flagged 0x2.
-        \item 0x4 is set when the read is unmapped (no \gls{hsp} in the record).
-        \item 0x8 is set when the read's mate is unmapped.
-        \item 0x10 is set when the read is mapped on the reverse strand. For the read's \gls{hsp}, it means that \texttt{hsp->\allowbreak hsp\_hit\_to < \allowbreak hsp->\allowbreak hsp\_hit\_from}.
-        \item 0x20 is set when the read's mate is mapped on the reverse strand.
-        \item 0x40 is set if the read is the first of its pair. If there are two fastQs, it means the read comes from the first file.
-        \item 0x80 is set if the read is the second if its pair.
-        \item 0x100 is set if the record is a secondary alignment.
-        If after the alignment filtering, the read still possesses more than one record; the best one is selected; the others are flagged secondary (0x100)
-        (see subsections~\ref{subsec:recFilter} and \ref{subsec:thereCanBeOnlyOne}).
-        \item 0x200 and 0x400 cannot be set by \blastobam{}.
-        \item 0x800 is set if the record is part of a chimeric alignment.
+        \item \texttt{0x1} is set when the sequencing data is paired-end. If it is unset, \texttt{0x2}, \texttt{0x8}, \texttt{0x20}, \texttt{0x40} and \texttt{0x80} cannot be set.
+        \item \texttt{0x2} is set when the pair of reads is considered properly aligned.
+        As the paired records have already been filtered (see Subsection~\ref{subsec:recFilter}), every mapped reads coming from paired-end data is flagged \texttt{0x2}.
+        \item \texttt{0x4} is set when the read is unmapped (no \gls{hsp} in the record).
+        \item \texttt{0x8} is set when the read's mate is unmapped.
+        \item \texttt{0x10} is set when the read is mapped on the reverse strand. For the read's \gls{hsp}, it means that \texttt{hsp->\allowbreak{}hsp\_hit\_to < \allowbreak{}hsp->\allowbreak{}hsp\_hit\_from}.
+        \item \texttt{0x20} is set when the read's mate is mapped on the reverse strand.
+        \item \texttt{0x40} is set if the read is the first of its pair. If there are two fastQs, it means the read comes from the first file.
+        \item \texttt{0x80} is set if the read is the second if its pair.
+        \item \texttt{0x100} is set if the record is a secondary alignment.
+        If after the alignment filtering, the read still possesses more than one record; the best one is selected; the others are flagged secondary (\texttt{0x100})
+        (see subsections~\ref{subsec:recFilter} and~\ref{subsec:thereCanBeOnlyOne}).
+        \item \texttt{0x200} and \texttt{0x400} cannot be set by \blastobam{}.
+        \item \texttt{0x800} is set if the record is part of a chimeric alignment.
         For the time being, chimeric alignments cannot be processed by \blastobam{}.
     \end{itemize}
-    \item RNAME: The name of the reference on which the read is mapped is taken from the \emph{SamOutput} structure: \texttt{samOutput->\allowbreak rname}.
-    \item POS: The position at which the read is mapped is taken from the \emph{SamOutput} structure.
+    \item RNAME\@: The name of the reference on which the read is mapped is taken from the \emph{SamOutput} structure: \texttt{samOutput->\allowbreak{}rname}.
+    \item POS\@: The position at which the read is mapped is taken from the \emph{SamOutput} structure.
     The \gls{sam} format specification~\cite{samspec} stipulates that POS should be the leftmost position of the alignment on the reference.
-    Depending on which is the leftmost, POS is chosen between \texttt{samOutput->\allowbreak hsp->\allowbreak hsp\_hit\_from} and \texttt{samOutput->\allowbreak hsp->\allowbreak hsp\_hit\_to}.
-    \item MAPQ: In order to be compatible with downstream software, the mapping quality is set to 60 for mapped and 0 for unmapped reads.
+    Depending on which is the leftmost, POS is chosen between \texttt{samOutput->\allowbreak{}hsp->\allowbreak{}hsp\_hit\_from} and \texttt{samOutput->\allowbreak{}hsp->\allowbreak{}hsp\_hit\_to}.
+    \item MAPQ\@: In order to be compatible with downstream software, the mapping quality is set to 60 for mapped and 0 for unmapped reads.
     The score of the alignment calculated by \gls{blast} can be found in the metadata tags.
-    \item CIGAR: The \gls{cigar} string is done by comparison between the read and reference sequences displayed in \gls{blast} output (\texttt{hsp->\allowbreak hsp\_qseq} and \texttt{hsp->\allowbreak hsp\_hseq}).
+    \item CIGAR\@: The \gls{cigar} string is done by comparison between the read and reference sequences displayed in \gls{blast} output (\texttt{hsp->\allowbreak{}hsp\_qseq} and \texttt{hsp->\allowbreak{}hsp\_hseq}).
     Unlike other mappers such as \gls{bwa}, we chose to differentiate matches and mismatches and so display `=' and `X' and no `M'.
-    \item RNEXT: The name of the mate's reference is taken from its \emph{SamOutput} structure in the same manner RNAME was taken for the read. If RNAME and RNEXT are the same, RNEXT is noted `='.
-    \item PNEXT: The position at which the mate is mapped is taken from its \emph{SamOutput} structure in the same manner POS was taken for the read.
-    \item TLEN: The template length is taken from the \emph{RecordSam} structure: \texttt{recordSam->\allowbreak tlen}.
+    \item RNEXT\@: The name of the mate's reference is taken from its \emph{SamOutput} structure in the same manner RNAME was taken for the read. If RNAME and RNEXT are the same, RNEXT is noted `='.
+    \item PNEXT\@: The position at which the mate is mapped is taken from its \emph{SamOutput} structure in the same manner POS was taken for the read.
+    \item TLEN\@: The template length is taken from the \emph{RecordSam} structure: \texttt{recordSam->\allowbreak{}tlen}.
     If the read is mapped on the reverse strand, a minus sign is added.
-    \item SEQ: The Sequence of the read is taken from the \emph{SamOutput} structure: \texttt{samOutput->\allowbreak query->\allowbreak seq}.
+    \item SEQ\@: The Sequence of the read is taken from the \emph{SamOutput} structure: \texttt{samOutput->\allowbreak{}query->\allowbreak{}seq}.
     As specified~\cite{samspec}, if the read is mapped on the reverse strand, its sequence is displayed reverse-complemented.
-    \item QUAL: The sequencing quality of the read is taken from the \emph{SamOutput} structure: \texttt{samOutput->\allowbreak query->\allowbreak qual}.
+    \item QUAL\@: The sequencing quality of the read is taken from the \emph{SamOutput} structure: \texttt{samOutput->\allowbreak{}query->\allowbreak{}qual}.
     Similarly to the SEQ column, if the read is mapped on the reverse strand, its sequencing quality string will be reversed.
     \item Metadata: The data displayed in this column is optional. This is what \blastobam{} can show:
     \begin{itemize}
         \item NM corresponds to the number of differences between the read sequence and the reference in the alignment.
         Its calculation is based on the \gls{cigar} string, one point for every mismatch and every base inserted or deleted (X, I, D or N).
         \item RG corresponds to the read group identifier as described in the \emph{@RG} line of the header section.
-        \item AS is the alignment score. It is the \gls{hsp} score of the read: \texttt{samOutput->\allowbreak hsp->\allowbreak hsp\_score}.
-        \item XB is the alignment bitscore of the \gls{hsp}: \texttt{samOutput->\allowbreak hsp->\allowbreak hsp\_bit\_score}.
-        \item XE is the e-value of the alignment: \texttt{samOutput->\allowbreak hsp->\allowbreak hsp\_evalue}.
+        \item AS is the alignment score. It is the \gls{hsp} score of the read: \texttt{samOutput->\allowbreak{}hsp->\allowbreak{}hsp\_score}.
+        \item XB is the alignment bitscore of the \gls{hsp}: \texttt{samOutput->\allowbreak{}hsp->\allowbreak{}hsp\_bit\_score}.
+        \item XE is the e-value of the alignment: \texttt{samOutput->\allowbreak{}hsp->\allowbreak{}hsp\_evalue}.
     \end{itemize}
 \end{enumerate}
 
@@ -212,8 +207,7 @@ We will now see how \blastobam{} creates them.
 In order to improve \blastobam{} and make it more user-friendly, some upgrades were made.
 
 
-\subsection{Options}
-\label{subsec:options}
+\subsection{Options}\label{subsec:options}
 An option system was created to allow the user to tune \blastobam{} to his needs.
 \begin{itemize}
     \item \textbf{-o} \emph{file}: modification of the program output.
@@ -232,20 +226,19 @@ An option system was created to allow the user to tune \blastobam{} to his needs
     This option allows the user to impose a cut-off on the alignment length.
     If the alignment length is inferior to the given number, the alignment will not be displayed in the \gls{sam} file.
     If, for a given read, no alignment conforms to this rule, the read will be considered unmapped and printed as such.
-    This option has been improved further with a default action of which we will discuss in subsection~\ref{subsec:autofilter}.
+    This option has been improved further with a default action of which we will discuss in Subsection~\ref{subsec:autofilter}.
     \item \textbf{-z}: adjusted position.
     By default, the position of the alignment (POS) is its absolute position in the reference, 1 being the first position.
     If the reference is part of a bigger sequence, the user may want POS to show the position in the whole sequence rather than in the smaller fragment.
-    In that case, the position of the reference in the bigger sequence is often displayed in its name (example: chr2:12752-24782).
+    In that case, the position of the reference in the bigger sequence is often displayed in its name (example: chr2:12752\textendash{}24782).
     This option makes use of that and adjusts the position displayed to the position of the reference.
     Example: an alignment beginning at position 5 of the previous reference will have a POS noted 12757 with this option set.
 \end{itemize}
 
 
-\subsection{Automatic filtering}
-\label{subsec:autofilter}
-As we will see in chapter~\ref{ch:results}, in the same experiment, the reads can have very different lengths.
-In that case, a static cut-off to filter the records, like the one we have seen in subsection~\ref{subsec:options}, may not be the best solution.
+\subsection{Automatic filtering}\label{subsec:autofilter}
+As we will see in Chapter~\ref{ch:results}, in the same experiment, the reads can have very different lengths.
+In that case, a static cut-off to filter the records, like the one we have seen in Subsection~\ref{subsec:options}, may not be the best solution.
 For example, a threshold of 40 does not mean much for a read 10000 bases long but it can be very stringent if the read is only 50 bases long.
 Although this example is a bit extreme, it would be interesting to adjust the filter to the reads' length.
 We estimated that the size of the alignments should be equal to at least 20\% of the length of the read, with a minimum of 20 bases.
@@ -259,7 +252,7 @@ As this threshold is arbitrary, the user may choose a different one via option \
 \end{quote}
 This made us think that some people may have a use of \blastobam{} outside of \gls{ngs}.
 And so, it would maybe be interesting for the user to be able to use fasta files instead of fastQs as an input
-(see figures~\ref{fig:fastqExample} and \ref{fig:fastaExample} for a reminder of the differences between the two formats).
+(see figures~\ref{fig:fastqExample} and~\ref{fig:fastaExample} for a reminder of the differences between the two formats).
 
 To allow the use of fasta files, two modifications were necessary:
 \begin{itemize}
